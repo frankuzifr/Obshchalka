@@ -3,16 +3,22 @@ package com.frankuzi.obshchalka
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.frankuzi.obshchalka.messages.data.data_source.FirebaseDatabaseSource
+import com.frankuzi.obshchalka.messages.presentation.messages_list.MessagesScreen
+import com.frankuzi.obshchalka.messages.presentation.messages_list.MessagesViewModel
 import com.frankuzi.obshchalka.ui.theme.ObshchalkaTheme
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
+    private val viewModel = MessagesViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,22 +28,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    MessagesScreen(viewModel)
                 }
             }
         }
+
+        onMessagesChanged()
     }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+    private fun onMessagesChanged() {
+        val reference = FirebaseDatabaseSource.reference
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ObshchalkaTheme {
-        Greeting("Android")
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                viewModel.updateMessages()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 }
