@@ -1,20 +1,24 @@
 package com.frankuzi.obshchalka.messages.presentation.messages_list.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.frankuzi.obshchalka.App
 import com.frankuzi.obshchalka.messages.domain.model.Message
+import com.frankuzi.obshchalka.ui.theme.Cyan800
+import com.frankuzi.obshchalka.ui.theme.CyanA700
+import com.frankuzi.obshchalka.ui.theme.Teal800
+import com.frankuzi.obshchalka.ui.theme.TealA700
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,10 +27,16 @@ fun MessageCloud(
     message: Message,
     modifier: Modifier
 ) {
-    if (message.isYourMessage)
-        YourMessageCloud(message, modifier)
-    else
-        OpponentMessageCloud(message, modifier)
+
+    message.senderEmail?.let {
+        val appInstance = App.instance
+        val signedInUser = appInstance.googleAuthUIClient.getSignedInUser()
+
+        if (it == signedInUser?.email)
+            YourMessageCloud(message, modifier)
+        else
+            OpponentMessageCloud(message, modifier)
+    }
 }
 
 @SuppressLint("SimpleDateFormat")
@@ -44,31 +54,30 @@ fun YourMessageCloud(
             .padding(start = 100.dp)
     )
     {
+        val isSystemInDarkTheme = isSystemInDarkTheme()
         Box(
             modifier = Modifier
                 .background(
-                    color = Color.Blue,
+                    color = if (isSystemInDarkTheme) Teal800 else TealA700,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .align(Alignment.CenterEnd)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(10.dp),
+                    .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp),
                 horizontalAlignment = Alignment.End
             ) {
                 NameText(
-                    name = message.name,
+                    name = message.name ?: "Anonymous",
                     modifier = Modifier
                 )
+                Spacer(modifier = Modifier.height(5.dp))
                 MessageText(
-                    messageText = message.messageText,
+                    messageText = message.messageText ?: "",
                     modifier = Modifier
-                        .background(
-                            color = Color.Blue,
-                            shape = RoundedCornerShape(8.dp)
-                        )
                 )
+                Spacer(modifier = Modifier.height(5.dp))
                 DateText(
                     dateText = dateText,
                     modifier = Modifier
@@ -87,6 +96,7 @@ fun OpponentMessageCloud(
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
     val dateText: String = formatter.format(message.date)
 
+    val isSystemInDarkTheme = isSystemInDarkTheme()
     Box(
         modifier = modifier
             .padding(5.dp)
@@ -96,28 +106,26 @@ fun OpponentMessageCloud(
         Box(
             modifier = Modifier
                 .background(
-                    color = Color.Red,
+                    color = if (isSystemInDarkTheme) Cyan800 else CyanA700,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .align(Alignment.CenterStart)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(10.dp),
+                    .padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 NameText(
-                    name = message.name,
+                    name = message.name ?: "Anonymous",
                     modifier = Modifier
                 )
+                Spacer(modifier = Modifier.height(5.dp))
                 MessageText(
-                    messageText = message.messageText,
+                    messageText = message.messageText ?: "",
                     modifier = Modifier
-                        .background(
-                            color = Color.Red,
-                            shape = RoundedCornerShape(8.dp)
-                        )
                 )
+                Spacer(modifier = Modifier.height(5.dp))
                 DateText(
                     dateText = dateText,
                     modifier = Modifier
@@ -135,7 +143,8 @@ fun NameText(
     Text(
         text = name,
         modifier = modifier,
-        fontSize = 12.sp
+        fontSize = 12.sp,
+        fontStyle = FontStyle.Italic
     )
 }
 
@@ -171,8 +180,7 @@ fun Preview() {
             message = Message(
                 name = "Oleg",
                 messageText = "Helloasdasdasdasda alksjd;lkasj sdfsdf asdas asdasdaaaa lKSDJ Lksjd lK",
-                date = Date(10000L),
-                isYourMessage = true
+                date = Date(10000L)
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -182,8 +190,7 @@ fun Preview() {
             message = Message(
                 name = "Andrew",
                 messageText = "ASldkjasdkjlkadfjnca ajdkfaksdj aksdjfa kndaidf akjsdnc aksdf akjndc kajsndfia lskdcjn ",
-                date = Date(10000L),
-                isYourMessage = false
+                date = Date(10000L)
             ),
             modifier = Modifier
                 .fillMaxWidth()

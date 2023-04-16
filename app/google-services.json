@@ -15,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1037575603532-9fg7s24e25lnbl04l1f9j3a9uiockoqk.apps.googleusercontent.com",
+          "client_id": "1037575603532-js8ppaodbfmm8pr3dgmg48rrk127jmrl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frankuzi.obshchalka",
+            "certificate_hash": "06d37aba26f464e507c8b4ce96b951402a5092ce"
+          }
+        },
+        {
+          "client_id": "1037575603532-ob6h83p72fmk69pdo3t9017sbt1vsfoa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

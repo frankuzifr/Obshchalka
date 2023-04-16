@@ -1,6 +1,5 @@
 package com.frankuzi.obshchalka.messages.presentation.messages_list.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -34,7 +33,8 @@ fun MessageSendBlock(
             onClick = sendButtonOnClick,
             modifier = Modifier
                 .width(60.dp)
-                .height(60.dp)
+                .height(60.dp),
+            isInteractable = textFieldText != ""
         )
     }
 }
@@ -56,13 +56,13 @@ fun MessageInputField(
             )
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.DarkGray,
+            backgroundColor = MaterialTheme.colors.secondary,
             cursorColor = Color.Black,
             disabledLabelColor = Color.DarkGray,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
+        shape = RoundedCornerShape(0.dp),
         singleLine = false,
     )
 }
@@ -70,13 +70,15 @@ fun MessageInputField(
 @Composable
 fun SendMessageButton(
     onClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    isInteractable: Boolean
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Cyan),
-        shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
+//        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Cyan),
+        shape = RoundedCornerShape(0.dp),
+        enabled = isInteractable
     ) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_send_24),

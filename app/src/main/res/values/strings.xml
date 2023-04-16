@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Obshchalka</string>
+    <string name="obshchalka">Obshchalka</string>
+    <string name="sign_in_successful">Sign in successful!</string>
+    <string name="sign_out">Sign out?</string>
+    <string name="you_want_to_log_out">Are you sure you want to log out of your account?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="signed_out">Signed out!</string>
+    <string name="enter_message">Enter message…</string>
+    <string name="sign_in_with_google">Sign in with google</string>
+
+    <string name="your_web_client_id">1037575603532-ob6h83p72fmk69pdo3t9017sbt1vsfoa.apps.googleusercontent.com</string>
 </resources>

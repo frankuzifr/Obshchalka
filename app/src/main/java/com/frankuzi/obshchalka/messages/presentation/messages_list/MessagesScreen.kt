@@ -1,74 +1,87 @@
 package com.frankuzi.obshchalka.messages.presentation.messages_list
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.frankuzi.obshchalka.messages.domain.model.Message
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.frankuzi.obshchalka.R
 import com.frankuzi.obshchalka.messages.presentation.messages_list.components.MessageCloud
 import com.frankuzi.obshchalka.messages.presentation.messages_list.components.MessageSendBlock
-import java.util.*
+import com.frankuzi.obshchalka.ui.theme.Gray900
 
 @Composable
 fun MessagesScreen(
-    messagesViewModel: MessagesViewModel = viewModel()
+    onSendMessageClick: (String) -> Unit,
+    onSignOutClick: () -> Unit,
+    viewModel: MessagesViewModel
 ){
-    var messages by remember {
-        mutableStateOf(
-            listOf(
-                Message(
-                    name = "Oleg",
-                    messageText = "Hello",
-                    date = Date(10000L),
-                    isYourMessage = true
-                ),
-                Message(
-                    name = "Andrew",
-                    messageText = "Poshel nahuy",
-                    date = Date(10000L),
-                    isYourMessage = false
-                ),
-            )
-        )
-    }
+    val context = LocalContext.current
+    val messages by viewModel.messages.collectAsStateWithLifecycle()
 
     var messageText by remember {
         mutableStateOf("")
     }
 
     Image(
-        painter = painterResource(id = com.frankuzi.obshchalka.R.drawable.cats),
+        painter = painterResource(id = R.drawable.cats),
         contentDescription = "Background",
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.tint(color = Color.Gray, blendMode = BlendMode.Darken)
     )
     Scaffold(
+        topBar = {
+            TopAppBar(
+                backgroundColor = MaterialTheme.colors.background
+            ) {
+                Text(text = context.getString(R.string.obshchalka), fontSize = 18.sp, modifier = Modifier.padding(start = 10.dp))
+                Spacer(Modifier.weight(1f, true))
+                IconButton(onClick = onSignOutClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_exit_to_app_24),
+                        contentDescription = "Logout"
+                    )
+                }
+            }
+        },
         bottomBar = {
             MessageSendBlock(
                 textFieldText = messageText,
                 textFieldOnValueChanged = {
                     messageText = it
                 },
-                textFiledPlaceholderText = "Enter message...",
-                sendButtonOnClick = { messagesViewModel.sendMessage(Message(name = "Oleg", messageText = messageText, isYourMessage = true, date = Date(10000L))) },
+                textFiledPlaceholderText = context.getString(R.string.enter_message),
+                sendButtonOnClick = {
+                    onSendMessageClick.invoke(messageText)
+                    messageText = ""
+                                    },
                 modifier = Modifier
             )
         },
         backgroundColor = Color.Transparent
     ) {
-        it
-        LazyColumn() {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = it.calculateBottomPadding())
+        ) {
             items(messages){ message ->
                 MessageCloud(
                     message = message,
@@ -77,4 +90,12 @@ fun MessagesScreen(
             }
         }
     }
+}
+
+@Preview(name = "dark theme",
+    group = "themes",
+    uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun MessagesScreenPreview() {
+    MessagesScreen(onSendMessageClick = {}, onSignOutClick = { /*TODO*/ }, viewModel = MessagesViewModel())
 }
