@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -38,6 +40,11 @@ fun MessagesScreen(
     var messageText by remember {
         mutableStateOf("")
     }
+    val scrollState = rememberLazyListState()
+
+    LaunchedEffect(key1 = messages.size) {
+        scrollState.scrollToItem(messages.size)
+    }
 
     Image(
         painter = painterResource(id = R.drawable.cats),
@@ -51,7 +58,10 @@ fun MessagesScreen(
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background
             ) {
-                Text(text = context.getString(R.string.obshchalka), fontSize = 18.sp, modifier = Modifier.padding(start = 10.dp))
+                Text(
+                    text = context.getString(R.string.obshchalka),
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(start = 10.dp))
                 Spacer(Modifier.weight(1f, true))
                 IconButton(onClick = onSignOutClick) {
                     Icon(
@@ -80,7 +90,8 @@ fun MessagesScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = it.calculateBottomPadding())
+                .padding(bottom = it.calculateBottomPadding()),
+            state = scrollState
         ) {
             items(messages){ message ->
                 MessageCloud(
