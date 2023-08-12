@@ -8,10 +8,8 @@ class SendMessageUseCase(
     private val repository: MessagesRepository
 ) {
     fun sendMessage(message: Message) {
-        message.date?.let { date ->
-            val rawOffset = TimeZone.getDefault().rawOffset
-            date.time -= rawOffset
-        }
+        val rawOffset = TimeZone.getDefault().rawOffset.toLong()
+        message.date -= rawOffset
         repository.sendMessage(message)
     }
 }

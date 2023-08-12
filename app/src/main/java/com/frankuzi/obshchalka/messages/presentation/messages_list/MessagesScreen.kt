@@ -42,10 +42,6 @@ fun MessagesScreen(
     }
     val scrollState = rememberLazyListState()
 
-    LaunchedEffect(key1 = messages.size) {
-        scrollState.scrollToItem(messages.size)
-    }
-
     Image(
         painter = painterResource(id = R.drawable.cats),
         contentDescription = "Background",
@@ -99,6 +95,11 @@ fun MessagesScreen(
                     modifier = Modifier
                         .fillMaxWidth())
             }
+
+        }
+
+        LaunchedEffect(key1 = messages.size) {
+            scrollState.scrollToItem(messages.size)
         }
     }
 }

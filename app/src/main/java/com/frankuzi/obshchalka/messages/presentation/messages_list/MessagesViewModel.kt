@@ -28,7 +28,6 @@ class MessagesViewModel : ViewModel() {
     }
 
     fun updateMessages(snapshot: DataSnapshot) {
-        Log.i("Message", "Update")
         val messageList = _useCases.getMessagesUseCase.getMessages(snapshot)
         _messages.update { messageList }
     }

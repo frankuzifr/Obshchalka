@@ -46,7 +46,7 @@ fun YourMessageCloud(
     modifier: Modifier
 ) {
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
-    val dateText: String = formatter.format(message.date)
+    val dateText: String = formatter.format(Date(message.date))
 
     Box(
         modifier = modifier
@@ -94,7 +94,7 @@ fun OpponentMessageCloud(
     modifier: Modifier
 ) {
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
-    val dateText: String = formatter.format(message.date)
+    val dateText: String = formatter.format(Date(message.date))
 
     val isSystemInDarkTheme = isSystemInDarkTheme()
     Box(
@@ -180,7 +180,7 @@ fun Preview() {
             message = Message(
                 name = "Oleg",
                 messageText = "Helloasdasdasdasda alksjd;lkasj sdfsdf asdas asdasdaaaa lKSDJ Lksjd lK",
-                date = Date(10000L)
+                date = 10000L
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -190,7 +190,7 @@ fun Preview() {
             message = Message(
                 name = "Andrew",
                 messageText = "ASldkjasdkjlkadfjnca ajdkfaksdj aksdjfa kndaidf akjsdnc aksdf akjndc kajsndfia lskdcjn ",
-                date = Date(10000L)
+                date = 10000L
             ),
             modifier = Modifier
                 .fillMaxWidth()

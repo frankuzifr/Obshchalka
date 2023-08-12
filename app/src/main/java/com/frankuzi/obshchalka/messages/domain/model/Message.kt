@@ -5,6 +5,6 @@ import java.util.*
 data class Message(
     val name: String? = null,
     val messageText: String? = null,
-    val date: Date? = null,
+    var date: Long = 0,
     val senderEmail: String? = null
 )

@@ -12,10 +12,8 @@ class GetMessagesUseCase(
     fun getMessages(snapshot: DataSnapshot): List<Message> {
         val messages = repository.getMessages(snapshot)
         messages.map { message ->
-            message.date?.let { date ->
-                val rawOffset = TimeZone.getDefault().rawOffset
-                date.time += rawOffset
-            }
+        val rawOffset = TimeZone.getDefault().rawOffset
+        message.date += rawOffset
         }
         return messages
     }

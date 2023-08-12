@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                         name = App.instance.googleAuthUIClient.getSignedInUser()?.userName ?: "Anonymous",
                                         messageText = messageText,
                                         senderEmail = App.instance.googleAuthUIClient.getSignedInUser()?.email,
-                                        date = Calendar.getInstance().time
+                                        date = Calendar.getInstance().time.time
                                     ))
                                 },
                                 onSignOutClick = {
